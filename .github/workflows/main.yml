@@ -3,7 +3,7 @@ name: Go Deployment
 on:
   push:
     branches:
-      - main  # 触发条件可以根据你的需求进行修改
+      - master  # 触发条件可以根据你的需求进行修改
 
 jobs:
   deploy:
