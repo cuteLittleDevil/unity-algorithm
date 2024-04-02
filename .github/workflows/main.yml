@@ -1,9 +1,6 @@
-name: Go Deployment
+name: Upload Go test results
 
-on:
-  push:
-    branches:
-      - master  # 触发条件可以根据你的需求进行修改
+on: [push]
 
 jobs:
   build:
@@ -15,10 +12,16 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - name: Setup Go ${{ matrix.go-version }}
+      - name: Setup Go
         uses: actions/setup-go@v4
         with:
           go-version: ${{ matrix.go-version }}
-      # You can test your matrix by printing the current Go version
-      - name: Display Go version
-        run: go version
+      - name: Install dependencies
+        run: go get .
+      - name: Test with Go
+        run: go test -json > TestResults-${{ matrix.go-version }}.json
+      - name: Upload Go test results
+        uses: actions/upload-artifact@v4
+        with:
+          name: Go-results-${{ matrix.go-version }}
+          path: TestResults-${{ matrix.go-version }}.json
